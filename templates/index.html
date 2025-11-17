@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Fit Studio - Gold Weight Estimator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .container { display: flex; height: 100vh; }
+        .control-panel {
+            width: 380px;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            overflow-y: auto;
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .logo { text-align: center; margin-bottom: 25px; }
+        .logo h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        .logo p { color: #888; font-size: 11px; }
+        
+        /* Weight Display Card */
+        .weight-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.15) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .weight-card h3 {
+            color: #FFD700;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .weight-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFD700;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .weight-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        .weight-detail {
+            text-align: center;
+        }
+        .weight-detail-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+        }
+        .weight-detail-value {
+            font-size: 16px;
+            color: #FFD700;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .section {
+            background: rgba(40, 40, 40, 0.6);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #FFD700;
+        }
+        .chain-list {
+            max-height: 160px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 5px;
+        }
+        .chain-item {
+            padding: 10px 12px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-size: 13px;
+        }
+        .chain-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        .chain-item.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%);
+            border-color: #FFD700;
+        }
+        .nav-buttons { display: flex; gap: 8px; margin-top: 12px; }
+        .nav-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+        
+        /* Gold Type Selector */
+        .gold-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .gold-option {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        .gold-option:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        .gold-option.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        /* Chain Style Selector */
+        .style-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .style-option {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        .style-option:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        .style-option.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        .control-group { margin-bottom: 18px; }
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        .control-value {
+            color: #FFD700;
+            font-weight: 600;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.8);
+        }
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .toggle-group:last-child { border-bottom: none; }
+        .toggle-label { font-size: 12px; color: #ccc; }
+        .toggle-switch { position: relative; width: 45px; height: 24px; }
+        .toggle-switch input { display: none; }
+        .toggle-slider {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(21px);
+        }
+        .video-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            position: relative;
+        }
+        #videoFeed {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .status-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-text {
+            font-size: 13px;
+            color: #FFD700;
+        }
+        .fps-counter {
+            font-size: 11px;
+            color: #888;
+            font-family: 'Courier New', monospace;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 215, 0, 0.5); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .loading { animation: pulse 2s ease-in-out infinite; }
+        .info-note {
+            background: rgba(255, 215, 0, 0.05);
+            border-left: 3px solid #FFD700;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <div class="logo">
+                <h1>GOLD CHAIN ESTIMATOR</h1>
+                <p>Real-time Weight Calculation</p>
+            </div>
+
+            <!-- Weight Display -->
+            <div class="weight-card">
+                <h3>Estimated Gold Weight</h3>
+                <div class="weight-value" id="weightDisplay">0.00g</div>
+                <div class="weight-details">
+                    <div class="weight-detail">
+                        <div class="weight-detail-label">Thickness</div>
+                        <div class="weight-detail-value" id="thicknessDisplay">0mm</div>
+                    </div>
+                    <div class="weight-detail">
+                        <div class="weight-detail-label">Length</div>
+                        <div class="weight-detail-value" id="lengthDisplay">0"</div>
+                    </div>
+                </div>
+                <div class="info-note">
+                    * Estimates based on industry standards. Actual weight may vary by design and craftsmanship.
+                </div>
+            </div>
+
+            <!-- Gold Type Selection -->
+            <div class="section">
+                <div class="section-title">Gold Purity</div>
+                <div class="gold-selector">
+                    <div class="gold-option" onclick="selectGoldType('10K')">10K</div>
+                    <div class="gold-option active" onclick="selectGoldType('14K')">14K</div>
+                    <div class="gold-option" onclick="selectGoldType('18K')">18K</div>
+                    <div class="gold-option" onclick="selectGoldType('22K')">22K</div>
+                    <div class="gold-option" onclick="selectGoldType('24K')">24K</div>
+                </div>
+            </div>
+
+            <!-- Chain Style -->
+            <div class="section">
+                <div class="section-title">Chain Construction</div>
+                <div class="style-selector">
+                    <div class="style-option active" onclick="selectChainStyle('solid')">
+                        Solid<br><small>(Heavier)</small>
+                    </div>
+                    <div class="style-option" onclick="selectChainStyle('hollow')">
+                        Hollow<br><small>(30% Lighter)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Selection -->
+            <div class="section">
+                <div class="section-title">Chain Selection</div>
+                <div class="chain-list" id="chainList"></div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="previousChain()">Previous</button>
+                    <button class="nav-btn" onclick="nextChain()">Next</button>
+                </div>
+            </div>
+
+            <!-- Adjustments -->
+            <div class="section">
+                <div class="section-title">Adjustments</div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Chain Size</span>
+                        <span class="control-value" id="scaleValue">1.0x</span>
+                    </div>
+                    <input type="range" id="chainScale" min="0.5" max="2.0" step="0.1" value="1.0">
+                </div>
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Vertical Position</span>
+                        <span class="control-value" id="offsetValue">0.20</span>
+                    </div>
+                    <input type="range" id="verticalOffset" min="-0.3" max="0.5" step="0.05" value="0.20">
+                </div>
+            </div>
+
+            <!-- Display Options -->
+            <div class="section">
+                <div class="section-title">Display Options</div>
+                <div class="toggle-group">
+                    <span class="toggle-label">Show Neck Anchor</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="showNeckDot" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <span class="toggle-label">Auto Brightness</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoBrightness" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-panel">
+            <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+            <div class="status-bar">
+                <div class="status-text" id="statusText">
+                    <span class="loading">LIVE</span>
+                    <span id="currentChain"></span>
+                </div>
+                <div class="fps-counter">Streaming at 30 FPS</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chains = [];
+        let currentIndex = 0;
+        let currentGoldType = '14K';
+        let currentChainStyle = 'solid';
+
+        // Load chains
+        fetch('/api/chains')
+            .then(r => r.json())
+            .then(data => {
+                chains = data.chains;
+                currentIndex = data.current;
+                renderChains();
+                updateStatus();
+            });
+
+        // Update weight display continuously
+        setInterval(() => {
+            fetch('/api/weight')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.weight_grams > 0) {
+                        document.getElementById('weightDisplay').textContent = 
+                            data.weight_grams.toFixed(2) + 'g';
+                        document.getElementById('thicknessDisplay').textContent = 
+                            data.thickness_mm.toFixed(1) + 'mm';
+                        document.getElementById('lengthDisplay').textContent = 
+                            data.length_inches.toFixed(1) + '"';
+                    }
+                });
+        }, 500);
+
+        function renderChains() {
+            const list = document.getElementById('chainList');
+            list.innerHTML = chains.map((chain, idx) => 
+                `<div class="chain-item ${idx === currentIndex ? 'active' : ''}" 
+                      onclick="selectChain(${idx})">
+                    ${chain}
+                </div>`
+            ).join('');
+        }
+
+        function selectChain(index) {
+            fetch('/api/chain/select', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({index})
+            }).then(() => {
+                currentIndex = index;
+                renderChains();
+                updateStatus();
+            });
+        }
+
+        function previousChain() {
+            selectChain((currentIndex - 1 + chains.length) % chains.length);
+        }
+
+        function nextChain() {
+            selectChain((currentIndex + 1) % chains.length);
+        }
+
+        function updateStatus() {
+            document.getElementById('currentChain').textContent = 
+                ' | ' + chains[currentIndex];
+        }
+
+        function selectGoldType(type) {
+            currentGoldType = type;
+            document.querySelectorAll('.gold-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateSettings();
+        }
+
+        function selectChainStyle(style) {
+            currentChainStyle = style;
+            document.querySelectorAll('.style-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateSettings();
+        }
+
+        function updateSettings() {
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    show_neck_dot: document.getElementById('showNeckDot').checked,
+                    brightness_auto: document.getElementById('autoBrightness').checked,
+                    chain_scale: parseFloat(document.getElementById('chainScale').value),
+                    vertical_offset: parseFloat(document.getElementById('verticalOffset').value),
+                    gold_type: currentGoldType,
+                    chain_style: currentChainStyle
+                })
+            });
+        }
+
+        document.getElementById('chainScale').addEventListener('input', (e) => {
+            document.getElementById('scaleValue').textContent = e.target.value + 'x';
+            updateSettings();
+        });
+
+        document.getElementById('verticalOffset').addEventListener('input', (e) => {
+            document.getElementById('offsetValue').textContent = e.target.value;
+            updateSettings();
+        });
+
+        document.getElementById('showNeckDot').addEventListener('change', updateSettings);
+        document.getElementById('autoBrightness').addEventListener('change', updateSettings);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') previousChain();
+            if (e.key === 'ArrowRight') nextChain();
+        });
+    </script>
+</body>
+</html>
