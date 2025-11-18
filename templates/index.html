@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chain Fit Studio - Gold Weight Estimator</title>
+    <title>Chain Fit Studio</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
@@ -13,192 +18,126 @@
             overflow: hidden;
             height: 100vh;
         }
-        .container { display: flex; height: 100vh; }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
         .control-panel {
-            width: 380px;
+            width: 350px;
             background: rgba(30, 30, 30, 0.95);
             backdrop-filter: blur(10px);
-            padding: 25px;
+            padding: 30px;
             overflow-y: auto;
             box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
         }
-        .logo { text-align: center; margin-bottom: 25px; }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
         .logo h1 {
-            font-size: 24px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            font-size: 28px;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 5px;
         }
-        .logo p { color: #888; font-size: 11px; }
-        
-        /* Weight Display Card */
-        .weight-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.15) 100%);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
+
+        .logo p {
+            color: #888;
+            font-size: 12px;
         }
-        .weight-card h3 {
-            color: #FFD700;
-            font-size: 14px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .weight-value {
-            font-size: 36px;
-            font-weight: bold;
-            color: #FFD700;
-            margin: 10px 0;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        .weight-details {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
-        }
-        .weight-detail {
-            text-align: center;
-        }
-        .weight-detail-label {
-            font-size: 10px;
-            color: #999;
-            text-transform: uppercase;
-        }
-        .weight-detail-value {
-            font-size: 16px;
-            color: #FFD700;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        
+
         .section {
             background: rgba(40, 40, 40, 0.6);
             border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .section-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 12px;
-            color: #FFD700;
+            margin-bottom: 15px;
+            color: #00ff88;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
         .chain-list {
-            max-height: 160px;
+            max-height: 200px;
             overflow-y: auto;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             padding: 5px;
         }
+
         .chain-item {
-            padding: 10px 12px;
-            margin: 4px 0;
+            padding: 12px 15px;
+            margin: 5px 0;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
-            font-size: 13px;
         }
+
         .chain-item:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.3);
         }
+
         .chain-item.active {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%);
-            border-color: #FFD700;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 204, 255, 0.2) 100%);
+            border-color: #00ff88;
         }
-        .nav-buttons { display: flex; gap: 8px; margin-top: 12px; }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
         .nav-btn {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 12px;
+            font-size: 14px;
         }
+
         .nav-btn:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
             transform: translateY(-2px);
         }
-        
-        /* Gold Type Selector */
-        .gold-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
+
+        .control-group {
+            margin-bottom: 20px;
         }
-        .gold-option {
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-        .gold-option:hover {
-            background: rgba(255, 215, 0, 0.1);
-        }
-        .gold-option.active {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
-            color: #FFD700;
-            font-weight: 600;
-        }
-        
-        /* Chain Style Selector */
-        .style-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .style-option {
-            flex: 1;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 12px;
-        }
-        .style-option:hover {
-            background: rgba(255, 215, 0, 0.1);
-        }
-        .style-option.active {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
-            color: #FFD700;
-            font-weight: 600;
-        }
-        
-        .control-group { margin-bottom: 18px; }
+
         .control-label {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            font-size: 12px;
+            font-size: 13px;
             color: #ccc;
         }
+
         .control-value {
-            color: #FFD700;
+            color: #00ff88;
             font-weight: 600;
         }
+
         input[type="range"] {
             width: 100%;
             height: 6px;
@@ -207,56 +146,23 @@
             outline: none;
             -webkit-appearance: none;
         }
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.5);
             transition: all 0.3s ease;
         }
+
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.2);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.8);
         }
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .toggle-group:last-child { border-bottom: none; }
-        .toggle-label { font-size: 12px; color: #ccc; }
-        .toggle-switch { position: relative; width: 45px; height: 24px; }
-        .toggle-switch input { display: none; }
-        .toggle-slider {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .toggle-slider:before {
-            content: "";
-            position: absolute;
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        input:checked + .toggle-slider {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        }
-        input:checked + .toggle-slider:before {
-            transform: translateX(21px);
-        }
+
         .video-panel {
             flex: 1;
             display: flex;
@@ -266,11 +172,17 @@
             background: #000;
             position: relative;
         }
-        #videoFeed {
+
+        #videoElement {
+            display: none;
+        }
+
+        #canvasElement {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
         }
+
         .status-bar {
             position: absolute;
             bottom: 0;
@@ -278,40 +190,69 @@
             right: 0;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            padding: 12px 25px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .status-text {
-            font-size: 13px;
-            color: #FFD700;
+            font-size: 14px;
+            color: #00ff88;
         }
-        .fps-counter {
-            font-size: 11px;
-            color: #888;
-            font-family: 'Courier New', monospace;
+
+        .start-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4);
+            z-index: 10;
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+
+        .start-button:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.6);
+        }
+
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 50, 50, 0.9);
+            padding: 20px 40px;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 215, 0, 0.3);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 215, 0, 0.5); }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .loading { animation: pulse 2s ease-in-out infinite; }
-        .info-note {
-            background: rgba(255, 215, 0, 0.05);
-            border-left: 3px solid #FFD700;
-            padding: 10px;
-            margin-top: 10px;
+            background: rgba(0, 255, 136, 0.3);
             border-radius: 4px;
-            font-size: 11px;
-            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            color: #00ff88;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -319,67 +260,28 @@
     <div class="container">
         <div class="control-panel">
             <div class="logo">
-                <h1>GOLD CHAIN ESTIMATOR</h1>
-                <p>Real-time Weight Calculation</p>
+                <h1>CHAIN FIT STUDIO</h1>
+                <p>Real-time Virtual Try-On</p>
             </div>
 
-            <!-- Weight Display -->
-            <div class="weight-card">
-                <h3>Estimated Gold Weight</h3>
-                <div class="weight-value" id="weightDisplay">0.00g</div>
-                <div class="weight-details">
-                    <div class="weight-detail">
-                        <div class="weight-detail-label">Thickness</div>
-                        <div class="weight-detail-value" id="thicknessDisplay">0mm</div>
-                    </div>
-                    <div class="weight-detail">
-                        <div class="weight-detail-label">Length</div>
-                        <div class="weight-detail-value" id="lengthDisplay">0"</div>
-                    </div>
-                </div>
-                <div class="info-note">
-                    * Estimates based on industry standards. Actual weight may vary by design and craftsmanship.
-                </div>
-            </div>
-
-            <!-- Gold Type Selection -->
             <div class="section">
-                <div class="section-title">Gold Purity</div>
-                <div class="gold-selector">
-                    <div class="gold-option" onclick="selectGoldType('10K')">10K</div>
-                    <div class="gold-option active" onclick="selectGoldType('14K')">14K</div>
-                    <div class="gold-option" onclick="selectGoldType('18K')">18K</div>
-                    <div class="gold-option" onclick="selectGoldType('22K')">22K</div>
-                    <div class="gold-option" onclick="selectGoldType('24K')">24K</div>
+                <div class="section-title">
+                    <span>🔗 Chain Selection</span>
                 </div>
-            </div>
-
-            <!-- Chain Style -->
-            <div class="section">
-                <div class="section-title">Chain Construction</div>
-                <div class="style-selector">
-                    <div class="style-option active" onclick="selectChainStyle('solid')">
-                        Solid<br><small>(Heavier)</small>
-                    </div>
-                    <div class="style-option" onclick="selectChainStyle('hollow')">
-                        Hollow<br><small>(30% Lighter)</small>
-                    </div>
+                <div class="chain-list" id="chainList">
+                    <div class="loading">Loading chains...</div>
                 </div>
-            </div>
-
-            <!-- Chain Selection -->
-            <div class="section">
-                <div class="section-title">Chain Selection</div>
-                <div class="chain-list" id="chainList"></div>
                 <div class="nav-buttons">
-                    <button class="nav-btn" onclick="previousChain()">Previous</button>
-                    <button class="nav-btn" onclick="nextChain()">Next</button>
+                    <button class="nav-btn" onclick="previousChain()">← Previous</button>
+                    <button class="nav-btn" onclick="nextChain()">Next →</button>
                 </div>
             </div>
 
-            <!-- Adjustments -->
             <div class="section">
-                <div class="section-title">Adjustments</div>
+                <div class="section-title">
+                    <span>⚙️ Adjustments</span>
+                </div>
+                
                 <div class="control-group">
                     <div class="control-label">
                         <span>Chain Size</span>
@@ -387,31 +289,13 @@
                     </div>
                     <input type="range" id="chainScale" min="0.5" max="2.0" step="0.1" value="1.0">
                 </div>
+
                 <div class="control-group">
                     <div class="control-label">
                         <span>Vertical Position</span>
                         <span class="control-value" id="offsetValue">0.20</span>
                     </div>
                     <input type="range" id="verticalOffset" min="-0.3" max="0.5" step="0.05" value="0.20">
-                </div>
-            </div>
-
-            <!-- Display Options -->
-            <div class="section">
-                <div class="section-title">Display Options</div>
-                <div class="toggle-group">
-                    <span class="toggle-label">Show Neck Anchor</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="showNeckDot" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-group">
-                    <span class="toggle-label">Auto Brightness</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="autoBrightness" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
                 </div>
             </div>
         </div>
@@ -421,67 +305,66 @@
             <video id="videoElement" autoplay playsinline></video>
             <canvas id="canvasElement"></canvas>
             <div class="status-bar">
-                <div class="status-text" id="statusText">
-                    <span class="loading">LIVE</span>
-                    <span id="currentChain"></span>
+                <div class="status-text">
+                    <span id="statusText">Click Start Camera</span>
                 </div>
-                <div class="fps-counter">Streaming at 30 FPS</div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
     <script>
         let chains = [];
         let currentIndex = 0;
-        let currentGoldType = '14K';
-        let currentChainStyle = 'solid';
+        let chainScale = 1.0;
+        let verticalOffset = 0.20;
+        let faceMesh;
+        let camera;
+        let currentChainImage = new Image();
+        let isProcessing = false;
 
-        // Load chains
+        const video = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvasElement');
+        const ctx = canvas.getContext('2d');
+
+        // Load chains from server
+        console.log('Loading chains...');
         fetch('/api/chains')
             .then(r => r.json())
             .then(data => {
+                console.log('Chains loaded:', data.chains.length);
                 chains = data.chains;
-                currentIndex = data.current;
-                renderChains();
-                updateStatus();
+                renderChainList();
+                loadChain(0);
+            })
+            .catch(err => {
+                console.error('Error loading chains:', err);
+                document.getElementById('chainList').innerHTML = 
+                    '<div style="color: red; padding: 10px;">Error loading chains!</div>';
             });
 
-        // Update weight display continuously
-        setInterval(() => {
-            fetch('/api/weight')
-                .then(r => r.json())
-                .then(data => {
-                    if (data.weight_grams > 0) {
-                        document.getElementById('weightDisplay').textContent = 
-                            data.weight_grams.toFixed(2) + 'g';
-                        document.getElementById('thicknessDisplay').textContent = 
-                            data.thickness_mm.toFixed(1) + 'mm';
-                        document.getElementById('lengthDisplay').textContent = 
-                            data.length_inches.toFixed(1) + '"';
-                    }
-                });
-        }, 500);
-
-        function renderChains() {
+        function renderChainList() {
             const list = document.getElementById('chainList');
             list.innerHTML = chains.map((chain, idx) => 
                 `<div class="chain-item ${idx === currentIndex ? 'active' : ''}" 
                       onclick="selectChain(${idx})">
-                    ${chain}
+                    ${chain.name}
                 </div>`
             ).join('');
         }
 
         function selectChain(index) {
-            fetch('/api/chain/select', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({index})
-            }).then(() => {
-                currentIndex = index;
-                renderChains();
-                updateStatus();
-            });
+            currentIndex = index;
+            loadChain(index);
+            renderChainList();
+            updateStatus();
+        }
+
+        function loadChain(index) {
+            console.log('Loading chain:', chains[index].name);
+            currentChainImage.src = chains[index].data;
         }
 
         function previousChain() {
@@ -493,61 +376,135 @@
         }
 
         function updateStatus() {
-            document.getElementById('currentChain').textContent = 
-                ' | ' + chains[currentIndex];
+            document.getElementById('statusText').textContent = 
+                '🟢 LIVE | ' + chains[currentIndex].name;
         }
 
-        function selectGoldType(type) {
-            currentGoldType = type;
-            document.querySelectorAll('.gold-option').forEach(el => {
-                el.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            updateSettings();
+        // Start camera
+        document.getElementById('startButton').addEventListener('click', async () => {
+            try {
+                console.log('Starting camera...');
+                document.getElementById('startButton').style.display = 'none';
+                document.getElementById('statusText').textContent = 'Loading camera...';
+                
+                // Initialize MediaPipe Face Mesh
+                console.log('Initializing MediaPipe...');
+                faceMesh = new FaceMesh({
+                    locateFile: (file) => {
+                        console.log('Loading MediaPipe file:', file);
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+                    }
+                });
+                
+                faceMesh.setOptions({
+                    maxNumFaces: 1,
+                    refineLandmarks: true,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+                
+                faceMesh.onResults(onResults);
+
+                // Start camera
+                console.log('Starting camera stream...');
+                camera = new Camera(video, {
+                    onFrame: async () => {
+                        if (!isProcessing) {
+                            isProcessing = true;
+                            await faceMesh.send({image: video});
+                            isProcessing = false;
+                        }
+                    },
+                    width: 1280,
+                    height: 720
+                });
+                
+                await camera.start();
+                console.log('Camera started successfully!');
+                updateStatus();
+                
+            } catch (err) {
+                console.error('Camera error:', err);
+                alert('Camera access denied! Please allow camera permission and refresh the page.\n\nError: ' + err.message);
+                document.getElementById('startButton').style.display = 'block';
+                document.getElementById('statusText').textContent = 'Camera failed - try again';
+            }
+        });
+
+        function onResults(results) {
+            canvas.width = results.image.width;
+            canvas.height = results.image.height;
+
+            // Draw video frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                const landmarks = results.multiFaceLandmarks[0];
+                drawChain(landmarks, canvas.width, canvas.height);
+            }
         }
 
-        function selectChainStyle(style) {
-            currentChainStyle = style;
-            document.querySelectorAll('.style-option').forEach(el => {
-                el.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            updateSettings();
+        function drawChain(landmarks, w, h) {
+            // Key landmarks
+            const JAW_LEFT = 234;
+            const JAW_RIGHT = 454;
+            const CHIN = 152;
+            const NOSE_TIP = 4;
+
+            const jawL = {x: landmarks[JAW_LEFT].x * w, y: landmarks[JAW_LEFT].y * h};
+            const jawR = {x: landmarks[JAW_RIGHT].x * w, y: landmarks[JAW_RIGHT].y * h};
+            const chin = {x: landmarks[CHIN].x * w, y: landmarks[CHIN].y * h};
+            const nose = {x: landmarks[NOSE_TIP].x * w, y: landmarks[NOSE_TIP].y * h};
+
+            // Calculate neck position
+            const jawMidX = (jawL.x + jawR.x) / 2;
+            const jawMidY = (jawL.y + jawR.y) / 2;
+            const faceLength = Math.sqrt((nose.x - chin.x)**2 + (nose.y - chin.y)**2);
+            const jawWidth = Math.sqrt((jawR.x - jawL.x)**2 + (jawR.y - jawL.y)**2);
+
+            let verticalOff = faceLength * 0.3;
+            const widthFactor = Math.min(jawWidth / w, 0.3);
+            verticalOff += widthFactor * faceLength * 0.8;
+
+            const neckX = jawMidX;
+            const neckY = chin.y + verticalOff;
+
+            // Calculate scale
+            const targetW = jawWidth * (1.4 + (jawWidth / w) * 0.8);
+            let scale = targetW / currentChainImage.width;
+            scale *= chainScale;
+
+            // Calculate rotation
+            const angle = Math.atan2(jawR.y - jawL.y, jawR.x - jawL.x);
+
+            // Draw chain
+            const chainW = currentChainImage.width * scale;
+            const chainH = currentChainImage.height * scale;
+
+            ctx.save();
+            ctx.translate(neckX, neckY + (faceLength * 0.15) - (chainH * verticalOffset));
+            ctx.rotate(angle);
+            ctx.drawImage(currentChainImage, -chainW/2, 0, chainW, chainH);
+            ctx.restore();
         }
 
-        function updateSettings() {
-            fetch('/api/settings', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    show_neck_dot: document.getElementById('showNeckDot').checked,
-                    brightness_auto: document.getElementById('autoBrightness').checked,
-                    chain_scale: parseFloat(document.getElementById('chainScale').value),
-                    vertical_offset: parseFloat(document.getElementById('verticalOffset').value),
-                    gold_type: currentGoldType,
-                    chain_style: currentChainStyle
-                })
-            });
-        }
-
+        // Controls
         document.getElementById('chainScale').addEventListener('input', (e) => {
-            document.getElementById('scaleValue').textContent = e.target.value + 'x';
-            updateSettings();
+            chainScale = parseFloat(e.target.value);
+            document.getElementById('scaleValue').textContent = chainScale.toFixed(1) + 'x';
         });
 
         document.getElementById('verticalOffset').addEventListener('input', (e) => {
-            document.getElementById('offsetValue').textContent = e.target.value;
-            updateSettings();
+            verticalOffset = parseFloat(e.target.value);
+            document.getElementById('offsetValue').textContent = verticalOffset.toFixed(2);
         });
 
-        document.getElementById('showNeckDot').addEventListener('change', updateSettings);
-        document.getElementById('autoBrightness').addEventListener('change', updateSettings);
-
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') previousChain();
             if (e.key === 'ArrowRight') nextChain();
         });
     </script>
 </body>
-
 </html>
