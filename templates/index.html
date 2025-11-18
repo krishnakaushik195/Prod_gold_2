@@ -417,7 +417,9 @@
         </div>
 
         <div class="video-panel">
-            <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+            <button class="start-button" id="startButton">🎥 Start Camera</button>
+            <video id="videoElement" autoplay playsinline></video>
+            <canvas id="canvasElement"></canvas>
             <div class="status-bar">
                 <div class="status-text" id="statusText">
                     <span class="loading">LIVE</span>
@@ -547,4 +549,5 @@
         });
     </script>
 </body>
+
 </html>
