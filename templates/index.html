@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chain Fit Studio</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -17,152 +18,17 @@
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
         .container {
             display: flex;
+            flex-direction: column;
             height: 100vh;
+            width: 100vw;
         }
 
-        .control-panel {
-            width: 350px;
-            background: rgba(30, 30, 30, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            overflow-y: auto;
-            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-        }
-
-        .logo p {
-            color: #888;
-            font-size: 12px;
-        }
-
-        .section {
-            background: rgba(40, 40, 40, 0.6);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #00ff88;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chain-list {
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 5px;
-        }
-
-        .chain-item {
-            padding: 12px 15px;
-            margin: 5px 0;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .chain-item:hover {
-            background: rgba(0, 255, 136, 0.1);
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        .chain-item.active {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 204, 255, 0.2) 100%);
-            border-color: #00ff88;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .nav-btn:hover {
-            background: rgba(0, 255, 136, 0.2);
-            border-color: #00ff88;
-            transform: translateY(-2px);
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .control-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #ccc;
-        }
-
-        .control-value {
-            color: #00ff88;
-            font-weight: 600;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.8);
-        }
-
+        /* Mobile-first: Video takes full screen */
         .video-panel {
             flex: 1;
             display: flex;
@@ -171,6 +37,7 @@
             justify-content: center;
             background: #000;
             position: relative;
+            overflow: hidden;
         }
 
         #videoElement {
@@ -178,27 +45,9 @@
         }
 
         #canvasElement {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .status-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-text {
-            font-size: 14px;
-            color: #00ff88;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .start-button {
@@ -219,25 +68,238 @@
             z-index: 10;
         }
 
-        .start-button:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.6);
+        .start-button:active {
+            transform: translate(-50%, -50%) scale(0.95);
         }
 
-        .error-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 50, 50, 0.9);
-            padding: 20px 40px;
+        /* Floating controls at bottom */
+        .control-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 50vh;
+            overflow-y: auto;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .control-panel.collapsed {
+            transform: translateY(calc(100% - 60px));
+        }
+
+        .panel-header {
+            padding: 15px 20px;
+            background: rgba(20, 20, 20, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .toggle-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .control-panel.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .panel-content {
+            padding: 20px;
+        }
+
+        .section {
+            background: rgba(40, 40, 40, 0.6);
             border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #00ff88;
+        }
+
+        .chain-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .chain-item {
+            padding: 15px 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
             text-align: center;
-            z-index: 20;
+            font-size: 13px;
+        }
+
+        .chain-item:active {
+            transform: scale(0.95);
+        }
+
+        .chain-item.active {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 204, 255, 0.2) 100%);
+            border-color: #00ff88;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .nav-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+            background: rgba(0, 255, 136, 0.2);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .control-value {
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Top status bar */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 99;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: #00ff88;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Quick action buttons (floating) */
+        .quick-actions {
+            position: fixed;
+            right: 15px;
+            bottom: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 90;
+        }
+
+        .quick-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:active {
+            transform: scale(0.9);
+            background: rgba(0, 255, 136, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            color: #00ff88;
+            font-size: 14px;
+            padding: 20px;
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -246,67 +308,129 @@
 
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 255, 136, 0.3);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
-        .loading {
-            text-align: center;
-            color: #00ff88;
-            font-size: 14px;
+        /* Desktop layout */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .control-panel {
+                position: static;
+                width: 350px;
+                max-height: 100vh;
+                transform: none !important;
+                border-top: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .panel-header {
+                display: none;
+            }
+
+            .panel-content {
+                padding: 30px;
+            }
+
+            .quick-actions {
+                display: none;
+            }
+
+            #canvasElement {
+                object-fit: contain;
+            }
+
+            .chain-list {
+                grid-template-columns: 1fr;
+                max-height: 250px;
+                overflow-y: auto;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .control-panel {
+                max-height: 70vh;
+            }
+            
+            .status-bar {
+                padding: 8px 15px;
+            }
+
+            .quick-actions {
+                bottom: 50px;
+                right: 10px;
+            }
+
+            .quick-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="control-panel">
-            <div class="logo">
-                <h1>CHAIN FIT STUDIO</h1>
-                <p>Real-time Virtual Try-On</p>
-            </div>
-
-            <div class="section">
-                <div class="section-title">
-                    <span>🔗 Chain Selection</span>
-                </div>
-                <div class="chain-list" id="chainList">
-                    <div class="loading">Loading chains...</div>
-                </div>
-                <div class="nav-buttons">
-                    <button class="nav-btn" onclick="previousChain()">← Previous</button>
-                    <button class="nav-btn" onclick="nextChain()">Next →</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">
-                    <span>⚙️ Adjustments</span>
-                </div>
-                
-                <div class="control-group">
-                    <div class="control-label">
-                        <span>Chain Size</span>
-                        <span class="control-value" id="scaleValue">1.0x</span>
-                    </div>
-                    <input type="range" id="chainScale" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-
-                <div class="control-group">
-                    <div class="control-label">
-                        <span>Vertical Position</span>
-                        <span class="control-value" id="offsetValue">0.20</span>
-                    </div>
-                    <input type="range" id="verticalOffset" min="-0.3" max="0.5" step="0.05" value="0.20">
-                </div>
-            </div>
-        </div>
-
         <div class="video-panel">
             <button class="start-button" id="startButton">🎥 Start Camera</button>
             <video id="videoElement" autoplay playsinline></video>
             <canvas id="canvasElement"></canvas>
-            <div class="status-bar">
-                <div class="status-text">
-                    <span id="statusText">Click Start Camera</span>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-text" id="statusText">Click Start Camera</div>
+            <div class="status-indicator"></div>
+        </div>
+
+        <!-- Quick action buttons for mobile -->
+        <div class="quick-actions">
+            <div class="quick-btn" onclick="previousChain()" title="Previous">←</div>
+            <div class="quick-btn" onclick="nextChain()" title="Next">→</div>
+        </div>
+
+        <div class="control-panel collapsed" id="controlPanel">
+            <div class="panel-header" onclick="togglePanel()">
+                <div class="panel-title">⚙️ Controls</div>
+                <div class="toggle-icon">▼</div>
+            </div>
+
+            <div class="panel-content">
+                <div class="section">
+                    <div class="section-title">🔗 Select Chain</div>
+                    <div class="chain-list" id="chainList">
+                        <div class="loading">Loading chains...</div>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="previousChain()">← Previous</button>
+                        <button class="nav-btn" onclick="nextChain()">Next →</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">⚙️ Adjustments</div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Chain Size</span>
+                            <span class="control-value" id="scaleValue">1.0x</span>
+                        </div>
+                        <input type="range" id="chainScale" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>Vertical Position</span>
+                            <span class="control-value" id="offsetValue">0.20</span>
+                        </div>
+                        <input type="range" id="verticalOffset" min="-0.3" max="0.5" step="0.05" value="0.20">
+                    </div>
                 </div>
             </div>
         </div>
@@ -328,6 +452,12 @@
         const video = document.getElementById('videoElement');
         const canvas = document.getElementById('canvasElement');
         const ctx = canvas.getContext('2d');
+
+        // Toggle control panel on mobile
+        function togglePanel() {
+            const panel = document.getElementById('controlPanel');
+            panel.classList.toggle('collapsed');
+        }
 
         // Load chains from server
         console.log('Loading chains...');
@@ -377,7 +507,7 @@
 
         function updateStatus() {
             document.getElementById('statusText').textContent = 
-                '🟢 LIVE | ' + chains[currentIndex].name;
+                '🟢 ' + chains[currentIndex].name;
         }
 
         // Start camera
@@ -391,7 +521,6 @@
                 console.log('Initializing MediaPipe...');
                 faceMesh = new FaceMesh({
                     locateFile: (file) => {
-                        console.log('Loading MediaPipe file:', file);
                         return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
                     }
                 });
@@ -405,7 +534,7 @@
                 
                 faceMesh.onResults(onResults);
 
-                // Start camera
+                // Start camera with mobile-optimized settings
                 console.log('Starting camera stream...');
                 camera = new Camera(video, {
                     onFrame: async () => {
@@ -415,8 +544,9 @@
                             isProcessing = false;
                         }
                     },
-                    width: 1280,
-                    height: 720
+                    width: window.innerWidth > 768 ? 1280 : 720,
+                    height: window.innerWidth > 768 ? 720 : 1280,
+                    facingMode: 'user'
                 });
                 
                 await camera.start();
@@ -459,7 +589,6 @@
 
             // Calculate neck position
             const jawMidX = (jawL.x + jawR.x) / 2;
-            const jawMidY = (jawL.y + jawR.y) / 2;
             const faceLength = Math.sqrt((nose.x - chin.x)**2 + (nose.y - chin.y)**2);
             const jawWidth = Math.sqrt((jawR.x - jawL.x)**2 + (jawR.y - jawL.y)**2);
 
@@ -500,10 +629,29 @@
             document.getElementById('offsetValue').textContent = verticalOffset.toFixed(2);
         });
 
-        // Keyboard shortcuts
+        // Keyboard shortcuts (desktop)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') previousChain();
             if (e.key === 'ArrowRight') nextChain();
+        });
+
+        // Touch gestures for mobile
+        let touchStartX = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
+                if (diff > 0) {
+                    nextChain();
+                } else {
+                    previousChain();
+                }
+            }
         });
     </script>
 </body>
